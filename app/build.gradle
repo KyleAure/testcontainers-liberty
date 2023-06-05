@@ -1,0 +1,42 @@
+plugins {
+    // Output application as .war archive
+    id 'war'
+}
+
+repositories {
+    // Use Maven Central for resolving dependencies.
+    mavenCentral()
+}
+
+dependencies {
+    // Use JUnit Jupiter and Testcontainers for testing.
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.2'
+    testImplementation 'org.testcontainers:junit-jupiter:1.18.3'
+    testImplementation 'io.rest-assured:rest-assured:5.3.0'
+    testImplementation 'org.eclipse:yasson:3.0.3'
+    testImplementation 'org.slf4j:slf4j-log4j12:1.7.29'
+
+    // Use Jakarta API for application
+    implementation 'jakarta.ws.rs:jakarta.ws.rs-api:3.1.0'
+    implementation 'jakarta.json.bind:jakarta.json.bind-api:3.0.0'
+    implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
+    implementation 'jakarta.enterprise:jakarta.enterprise.cdi-api:4.0.1'
+    implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+// Name test application
+war.archiveName 'testapp.war'
+
+// Ensure application is created prior to testing
+test.dependsOn 'war'
+
+// Output verbose test logging
+test {
+    testLogging {
+        events "passed", "skipped", "failed", "standardOut", "standardError"
+    }
+}
