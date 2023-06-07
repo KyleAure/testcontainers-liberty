@@ -17,8 +17,6 @@ import org.testcontainers.utility.MountableFile;
 
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.specification.RequestSpecification;
-import jakarta.json.bind.Jsonb;
-import jakarta.json.bind.JsonbBuilder;
 
 @Testcontainers
 public class ServiceTest {
@@ -35,7 +33,7 @@ public class ServiceTest {
             .waitingFor(Wait.forLogMessage(".*CWWKZ0001I: Application .* started in .* seconds.*", 1))
             .withLogConsumer(new LogConsumer(ServiceTest.class, "liberty"));
 
-    // Setup RestAssured query our service
+    // Setup RestAssured to query our service
     static RequestSpecification requestSpecification;
 
     @BeforeAll
@@ -46,8 +44,6 @@ public class ServiceTest {
                 .build();
     }
 
-    // Run our test
-    Jsonb jsonb = JsonbBuilder.create();
     @Test
     public void testAddPerson() {
         // Add new person to service
@@ -72,7 +68,7 @@ public class ServiceTest {
 
         assertEquals(1, allIDs.size());
 
-        // Verify person is bob
+        // Verify that person is 'bob'
         String actual = given(requestSpecification)
             .accept("application/json")
         .when()
